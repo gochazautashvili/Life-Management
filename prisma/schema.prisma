@@ -1,0 +1,102 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model User {
+  id String @id @default(uuid())
+
+  username String
+  email    String @unique
+  password String
+
+  workspaces Workspace[]
+
+  createdAt DateTime @default(now())
+
+  @@map("users")
+}
+
+model Workspace {
+  id String @id @default(uuid())
+
+  title String
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String
+
+  boards     Board[]
+  activities Activity[]
+
+  createdAt DateTime @default(now())
+
+  @@map("workspaces")
+}
+
+model Board {
+  id String @id @default(uuid())
+
+  title      String
+  background String
+
+  workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  workspaceId String
+
+  tables Table[]
+
+  createdAt DateTime @default(now())
+
+  @@map("boards")
+}
+
+model Activity {
+  id String @id @default(uuid())
+
+  title       String
+  description String
+
+  workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  workspaceId String
+
+  createdAt DateTime @default(now())
+
+  @@map("activities")
+}
+
+model Table {
+  id String @id @default(uuid())
+
+  title String
+  order Int    @default(autoincrement())
+
+  board   Board  @relation(fields: [boardId], references: [id], onDelete: Cascade)
+  boardId String
+
+  tasks Task[]
+
+  createdAt DateTime @default(now())
+
+  @@map("tabels")
+}
+
+model Task {
+  id String @id @default(uuid())
+
+  title       String
+  description String
+  order       Int    @default(autoincrement())
+
+  deadline DateTime?
+
+  table   Table  @relation(fields: [tableId], references: [id], onDelete: Cascade)
+  tableId String
+
+  createdAt DateTime @default(now())
+
+  @@map("tasks")
+}
