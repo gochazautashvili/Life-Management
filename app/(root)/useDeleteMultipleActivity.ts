@@ -2,9 +2,9 @@ import { delete_multiple_activity } from "@/actions/activities";
 import { ActivityDataType } from "@/app/(root)/components/ActivityTable";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-const useDeleteMultipleActivity = (workspaceId: string) => {
+const useDeleteMultipleActivity = () => {
   const queryClient = useQueryClient();
-  const queryKey = ["activity", workspaceId];
+  const queryKey = ["activities"];
 
   return useMutation({
     mutationFn: delete_multiple_activity,

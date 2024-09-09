@@ -1,10 +1,10 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { delete_activity } from "@/actions/activities";
-import { ActivityDataType } from "./Activity";
+import { ActivityDataType } from "./components/ActivityTable";
 
-const useDeleteActivity = (workspaceId: string) => {
+const useDeleteActivity = () => {
   const queryClient = useQueryClient();
-  const queryKey = ["activity", workspaceId];
+  const queryKey = ["activities"];
 
   return useMutation({
     mutationFn: delete_activity,

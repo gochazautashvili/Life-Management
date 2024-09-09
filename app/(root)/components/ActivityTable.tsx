@@ -5,6 +5,8 @@ import { Button, Flex, Table, TableProps } from "antd";
 import axios from "axios";
 import dayjs from "dayjs";
 import { useState } from "react";
+import useDeleteMultipleActivity from "../useDeleteMultipleActivity";
+import useDeleteActivity from "../useDeleteActivity";
 
 type TableRowSelection<T extends object = object> =
   TableProps<T>["rowSelection"];
@@ -37,12 +39,18 @@ const ActivityTable = () => {
         .then((res) => res.data),
   });
 
+  const { mutate: delete_multiple, isPending: isDeletingMultiple } =
+    useDeleteMultipleActivity();
+  const { mutate, isPending } = useDeleteActivity();
+
   const Delete = (id: string) => {
     setDeletingId(id);
+    mutate(id, {
+      onSuccess: () => {
+        setDeletingId("");
+      },
+    });
   };
-
-  const isPending = false;
-  const isDeletingMultiple = false;
 
   const columns: TableProps<DataType>["columns"] = [
     {
@@ -85,7 +93,9 @@ const ActivityTable = () => {
       createdAt: dayjs(activity.createdAt).format("HH.mm - DD/MM/YYYY"),
     })) || [];
 
-  const DeleteMultiple = () => {};
+  const DeleteMultiple = () => {
+    delete_multiple(selectedRowKeys as string[]);
+  };
 
   const onSelectChange = (newSelectedRowKeys: React.Key[]) => {
     setSelectedRowKeys(newSelectedRowKeys);

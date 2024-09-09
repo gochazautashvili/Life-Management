@@ -4,8 +4,8 @@ import { useQuery } from "@tanstack/react-query";
 import { Button, Flex, Table, TableProps } from "antd";
 import axios from "axios";
 import dayjs from "dayjs";
-import useDeleteMultipleActivity from "./useDeleteMultipleActivity";
 import { useState } from "react";
+import useDeleteMultipleActivity from "./useDeleteMultipleActivity";
 import useDeleteActivity from "./useDeleteActivity";
 
 type TableRowSelection<T extends object = object> =
